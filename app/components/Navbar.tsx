@@ -25,6 +25,9 @@ const Navbar = () => {
                 <div className="flex items-center gap-x-4 relative">
                     {session ? (
                         <>
+                            <Link href={"/create"} className="button_create">
+                                Create
+                            </Link>
                             <button
                                 className="button_default"
                                 onClick={() => setIsToggle((before) => !before)}

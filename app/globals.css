@@ -13,7 +13,8 @@
 .button,
 .button_default,
 .button_submit,
-.button_auth {
+.button_auth,
+.button_create {
     @apply px-4 py-2 rounded font-semibold;
 }
 .button_default {
@@ -24,6 +25,9 @@
 }
 .button_auth {
     @apply border border-dark-shade text-dark-shade w-64;
+}
+.button_create {
+    @apply bg-dark-accent text-light-shade;
 }
 
 /* Form */
@@ -38,4 +42,9 @@ form input {
 }
 .error {
     @apply text-main-color font-semibold text-sm text-center mb-2 block;
+}
+
+/* Blog */
+.blog_output {
+    min-height: 4rem;
 }
