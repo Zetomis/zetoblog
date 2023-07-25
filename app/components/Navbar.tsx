@@ -4,12 +4,14 @@ import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import OptionDropdown from "./OptionDropdown";
 
 const Navbar = () => {
     const [isToggle, setIsToggle] = useState(false);
     const { data: session } = useSession();
+
+    const gearRef = useRef<HTMLButtonElement>(null);
 
     return (
         <div className="fixed top-0 left-0 right-0 bg-dark-shade z-10 h-16">
@@ -26,10 +28,16 @@ const Navbar = () => {
                             <button
                                 className="button_default"
                                 onClick={() => setIsToggle((before) => !before)}
+                                ref={gearRef}
                             >
                                 <FontAwesomeIcon icon={faGear} />
                             </button>
-                            {isToggle && <OptionDropdown />}
+                            {isToggle && (
+                                <OptionDropdown
+                                    setIsToggle={setIsToggle}
+                                    gearRef={gearRef}
+                                />
+                            )}
                         </>
                     ) : (
                         <>
