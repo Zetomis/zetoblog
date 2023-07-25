@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import MarkdownInput from "../components/MarkdownInput";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import MarkdownOutput from "../components/MardownOutput";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const CreatePage = () => {
     const [blogContent, setBlogContent] = useState("");
+    const [blogTitle, setBlogTitle] = useState("");
     const [error, setError] = useState<string | null>(null);
 
     const { data: session } = useSession();
@@ -24,19 +25,22 @@ const CreatePage = () => {
         );
     }
 
-    const handleCreateBlog = async () => {
+    const handleCreateBlog = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         const response = await fetch("/api/blog", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                title: blogTitle,
                 content: blogContent,
             }),
         });
 
         if (response.ok) {
             const data = await response.json();
+            console.log(data);
             router.push(`/blog/${data.id}`);
         } else {
             const error = await response.json();
@@ -55,19 +59,29 @@ const CreatePage = () => {
             >
                 Here is a Markdown guide
             </a>
-            <div className="grid grid-cols-2 gap-x-2 mb-8">
-                <div>
-                    <h1>Markdown Input</h1>
-                    <MarkdownInput setBlogContent={setBlogContent} />
+            <form
+                className="grid gap-y-4"
+                onSubmit={(e) => handleCreateBlog(e)}
+            >
+                <input
+                    type="text"
+                    className="w-full"
+                    placeholder="Enter Blog's title"
+                    onChange={(e) => setBlogTitle(e.target.value)}
+                />
+                <div className="grid grid-cols-2 gap-x-2">
+                    <div>
+                        <h1>Markdown Input</h1>
+                        <MarkdownInput setBlogContent={setBlogContent} />
+                    </div>
+                    <div>
+                        <h1>Markdown Output</h1>
+                        <MarkdownOutput blogContent={blogContent} />
+                    </div>
                 </div>
-                <div>
-                    <h1>Markdown Output</h1>
-                    <MarkdownOutput blogContent={blogContent} />
-                </div>
-            </div>
-            <button className="button_submit w-full" onClick={handleCreateBlog}>
-                Create Blog
-            </button>
+                {error && <span className="error">{error}</span>}
+                <button className="button_submit w-full">Create Blog</button>
+            </form>
         </div>
     );
 };
