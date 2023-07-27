@@ -12,6 +12,7 @@ const useBlog = (blogId: string) => {
             setError(null);
 
             const response = await fetch(`/api/blog/${blogId}`);
+
             if (response.ok) {
                 setIsLoading(false);
                 const data = (await response.json()) as BlogInterface;

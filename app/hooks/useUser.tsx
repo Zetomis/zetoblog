@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { UserInterface } from "../libs/types";
+import { useSession } from "next-auth/react";
 
-const useUser = (userId: string) => {
+const useUser = (userId?: string, currentUser: boolean = false) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<UserInterface>();
@@ -11,7 +12,11 @@ const useUser = (userId: string) => {
             setIsLoading(true);
             setError(null);
 
-            const response = await fetch(`/api/user/${userId}`);
+            const URLEndpoint = `${
+                currentUser ? `/api/user/current ` : `/api/user/${userId}`
+            }`;
+
+            const response = await fetch(URLEndpoint);
             if (response.ok) {
                 setIsLoading(false);
                 const data = (await response.json()) as UserInterface;
@@ -23,10 +28,10 @@ const useUser = (userId: string) => {
             }
         };
 
-        if (userId) {
+        if (userId || currentUser) {
             getUser();
         }
-    }, [userId]);
+    }, [userId, currentUser]);
 
     return { user, isLoading, error };
 };

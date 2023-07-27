@@ -14,7 +14,8 @@
 .button_default,
 .button_submit,
 .button_auth,
-.button_create {
+.button_create,
+.button_disabled {
     @apply px-4 py-2 rounded font-semibold;
 }
 .button_default {
@@ -28,6 +29,9 @@
 }
 .button_create {
     @apply bg-dark-accent text-light-shade;
+}
+.button_disabled {
+    @apply bg-light-shade text-light-accent pointer-events-none;
 }
 
 /* Form */
